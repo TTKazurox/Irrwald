@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Irrwald – Kostenlose Spiele online spielen</title>
+<style>
+:root{
+  --bg:#0b1b16; --panel:#122a23; --panel2:#19382f; --line:#25493e;
+  --text:#eef5ee; --muted:#9bb8ac; --glow:#f4d35e; --ink:#1b2a10; --berry:#ec5f4b; --fog:#6fd3c0;
+  --head:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#eef4ec; --panel:#fff; --panel2:#e1ede5; --line:#c9dccf;
+    --text:#13302a; --muted:#4f6e63; --glow:#f0c53d; --fog:#1f8f7c; color-scheme:light;
+  }
+}
+:root[data-theme="dark"]{color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;color:var(--text);font:600 16px/1.5 var(--body);
+  background:radial-gradient(900px 420px at 70% -80px,color-mix(in srgb,var(--fog) 16%,transparent),transparent),var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--glow);outline-offset:3px}
+
+.app{display:grid;grid-template-columns:104px 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;padding:14px 10px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;overflow-y:auto}
+.logo{display:block;text-align:center;font:800 19px/1 var(--head);color:var(--glow);padding:4px 0 14px;text-decoration:none}
+.logo svg{display:block;margin:0 auto 6px}
+.cat{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border:0;border-radius:16px;background:transparent;color:var(--muted);font-size:13px;font-weight:800;transition:background .15s,color .15s}
+.cat span{font-size:24px;line-height:1.1}
+.cat:hover{background:var(--panel2);color:var(--text)}
+.cat[aria-pressed="true"]{background:var(--glow);color:var(--ink);box-shadow:0 8px 20px rgba(244,211,94,.25)}
+
+main{min-width:0;padding:0 clamp(14px,3vw,32px) 56px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;display:flex;gap:12px;align-items:center;padding:16px 0 14px;background:linear-gradient(var(--bg) 80%,transparent)}
+.search{position:relative;flex:1;max-width:640px}
+.search svg{position:absolute;left:18px;top:50%;translate:0 -50%;color:var(--muted);pointer-events:none}
+.search input{width:100%;padding:14px 48px 14px 50px;border-radius:999px;border:2px solid var(--line);background:var(--panel);color:var(--text);font:700 16px var(--body);transition:border-color .15s,box-shadow .15s}
+.search input::placeholder{color:var(--muted)}
+.search input::-webkit-search-cancel-button{display:none}
+.search input:focus{border-color:var(--fog);outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--fog) 25%,transparent)}
+.clear{position:absolute;right:10px;top:50%;translate:0 -50%;width:30px;height:30px;border:0;border-radius:50%;background:var(--panel2);color:var(--muted);display:none;line-height:1}
+.search.has .clear{display:block}
+.kbd{position:absolute;right:16px;top:50%;translate:0 -50%;padding:1px 8px;border:1px solid var(--line);border-radius:6px;color:var(--muted);font-size:13px}
+.search.has .kbd,.search:focus-within .kbd{display:none}
+.sug{position:absolute;inset:calc(100% + 8px) 0 auto;margin:0;padding:6px;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 40px rgba(0,0,0,.4);display:none;overflow:hidden}
+.sug.open{display:block}
+.sug li{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:14px;cursor:pointer}
+.sug li[aria-selected="true"],.sug li:hover{background:var(--panel2)}
+.sug .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none;overflow:hidden}
+.sug .ic img{width:100%;height:100%;object-fit:cover}
+.sug b{display:block;font:700 16px var(--head)}
+.sug small{color:var(--muted)}
+.lucky{margin-left:auto;padding:11px 18px;border-radius:999px;border:2px solid var(--line);background:var(--panel);font-weight:800;white-space:nowrap}
+.lucky:hover{border-color:var(--glow)}
+
+.hero{position:relative;overflow:hidden;isolation:isolate;margin:6px 0 4px;padding:clamp(28px,5vw,54px) clamp(20px,4vw,46px) clamp(84px,11vw,130px);border-radius:30px;background:linear-gradient(135deg,#1d5240,#10302618 0),linear-gradient(135deg,#1d5240,#0f2b23 62%,#0b1f19);border:1px solid var(--line)}
+.hero h1{font:800 clamp(32px,5.4vw,60px)/1.04 var(--head);margin:0 0 12px;max-width:13ch;color:#fff}
+.hero p{margin:0;max-width:44ch;color:#bcd6ca;font-size:18px}
+.cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:14px 26px;border:0;border-radius:999px;background:var(--glow);color:var(--ink);font:800 18px var(--head);box-shadow:0 10px 26px rgba(244,211,94,.32);transition:transform .15s}
+.cta:hover{transform:translateY(-2px)}
+.trees{position:absolute;inset:auto 0 0;width:100%;height:clamp(64px,10vw,116px);z-index:-1}
+.fly{position:absolute;width:6px;height:6px;border-radius:50%;background:#f4d35e;box-shadow:0 0 12px 4px rgba(244,211,94,.55);z-index:-1;animation:fly 7s ease-in-out infinite}
+@keyframes fly{0%,100%{transform:translate(0,0);opacity:.15}50%{transform:translate(20px,-28px);opacity:1}}
+h2{display:flex;align-items:baseline;gap:10px;font:700 22px var(--head);margin:30px 0 14px}
+h2 small{font:700 14px var(--body);color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-flow:dense;gap:14px}
+.tile{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:24px;overflow:hidden;background:var(--panel2);isolation:isolate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 6px 16px rgba(0,0,0,.22);transition:transform .18s,box-shadow .18s}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.24),transparent 42%);pointer-events:none}
+.tile.big{grid-column:span 2;grid-row:span 2}
+.tile .art{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(46px,7vw,72px);z-index:-1}
+.tile.big .art{font-size:clamp(90px,13vw,150px)}
+.tile .art img{width:100%;height:100%;object-fit:cover}
+.tile .name{position:absolute;inset:auto 0 0;padding:30px 12px 11px;text-align:left;font:700 17px/1.15 var(--head);background:linear-gradient(transparent,rgba(5,15,12,.9));color:#fff;transform:translateY(100%);transition:transform .18s}
+.tile.big .name{font-size:24px;padding:44px 18px 16px}
+.tile:hover,.tile:focus-visible{transform:scale(1.045);box-shadow:0 0 0 3px var(--glow),0 14px 32px rgba(0,0,0,.4);z-index:2}
+.tile:hover .name,.tile:focus-visible .name{transform:none}
+@media (hover:none){.tile .name{transform:none}}
+.badge{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:999px;font:800 12px var(--head);background:var(--berry);color:#fff}
+
+.empty{margin:28px 0;padding:44px 20px 36px;text-align:center;border:2px dashed var(--line);border-radius:28px;background:color-mix(in srgb,var(--panel) 60%,transparent)}
+.empty svg{width:min(320px,70%);height:auto}
+.empty h3{font:800 26px var(--head);margin:10px 0 4px}
+.empty p{margin:0 auto;max-width:44ch;color:var(--muted)}
+.btn{padding:9px 18px;border-radius:999px;border:2px solid var(--line);background:var(--panel2)}
+.btn:hover{border-color:var(--glow)}
+.reset{margin-top:14px}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+
+.player{position:fixed;inset:0;z-index:70;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.player.open{display:flex}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.bar h3{font:700 20px var(--head);margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage{flex:1;min-height:0;display:grid;place-items:center;background:#050e0b}
+.stage iframe{width:100%;height:100%;border:0;background:#000}
+
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;inset:auto 0 0;height:auto;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));border:0;border-top:1px solid var(--line);z-index:50;gap:2px;overflow-x:auto;overflow-y:hidden}
+  .logo{display:none}
+  .cat{flex:0 0 auto;min-width:68px;padding:6px 8px;font-size:12px}
+  .cat span{font-size:20px}
+  main{padding-bottom:110px}
+  .lucky,.kbd{display:none}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.fly{animation:none;opacity:.7}}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="side" aria-label="Kategorien" id="cats"></nav>
+  <main>
+    <div class="top">
+      <div class="search" id="sbox">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Spiele suchen …" aria-label="Spiele suchen" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug">
+        <span class="kbd" aria-hidden="true">/</span>
+        <button class="clear" id="clear" aria-label="Suche leeren">✕</button>
+        <ul class="sug" id="sug" role="listbox"></ul>
+      </div>
+      <button class="lucky" id="lucky" hidden>🎲 Zufallsspiel</button>
+    </div>
+    <section class="hero">
+      <span class="fly" style="left:58%;top:18%"></span><span class="fly" style="left:72%;top:38%;animation-delay:-2s"></span><span class="fly" style="left:84%;top:20%;animation-delay:-4s"></span><span class="fly" style="left:46%;top:46%;animation-delay:-1s"></span><span class="fly" style="left:91%;top:52%;animation-delay:-5s"></span><span class="fly" style="left:66%;top:60%;animation-delay:-3s"></span>
+      <h1>Verirr dich in neuen Spielen</h1>
+      <p>Kostenlose Browserspiele ohne Download. Aussuchen, anklicken, losspielen.</p>
+      <div id="cta"></div>
+      <svg class="trees" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="t1" width="70" height="100" x="25" patternUnits="userSpaceOnUse"><path d="M35 10 10 100h50z" fill="#123a2f"/></pattern><pattern id="t2" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 32 4 100h48z" fill="#0a1a15"/></pattern></defs><rect width="1200" height="100" fill="url(#t1)"/><rect width="1200" height="100" fill="url(#t2)"/></svg>
+    </section>
+    <div id="recent"></div>
+    <h2 id="title">Alle Spiele <small id="count"></small></h2>
+    <div class="grid" id="grid"></div>
+    <div id="msg"></div>
+    <footer>© 2026 Irrwald</footer>
+  </main>
+</div>
+
+<div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="ptitle">
+  <div class="bar">
+    <button class="btn" id="back">‹ Zurück</button>
+    <h3 id="ptitle"></h3>
+    <button class="btn" id="full">Vollbild</button>
+  </div>
+  <div class="stage" id="stage"></div>
+</div>
+
+<script>
+/* ============ SPIELE ============
+   Ein Spiel hinzufügen = einen Eintrag in diese Liste setzen:
+   {id:'pilzjaeger', title:'Pilzjäger', cat:'Action', tags:['pilze','wald'], icon:'🍄',
+    c:['#ec5f4b','#a82f3a'], thumb:'Bild-URL (optional)', badge:'Neu', big:true,
+    src:'Link zum Spiel'  ODER  html:'kompletter Spiel-Code'} */
+const GAMES = [
+  {id:'blockbow', title:'Blockbow', cat:'Puzzle', tags:['bloecke','linien','denken','tetris'], icon:'🏹',
+   c:['#3b4bb8','#141a52'], badge:'Neu', big:true, featured:true, src:'games/blockbow.html'}
+];
+
+const CAT_ICONS = {Action:'💥',Puzzle:'🧩',Geschick:'🎯',Rennen:'🏁','Zwei Spieler':'👥',Denken:'🧠',Sport:'⚽',Abenteuer:'🗺️',Strategie:'♟️'};
+const $=id=>document.getElementById(id);
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ß/g,'ss');
+let cat='Alle', term='', active=-1, sugList=[];
+
+const hay=g=>norm([g.title,g.cat,...(g.tags||[])].join(' '));
+function search(t){
+  const words=norm(t).split(/\s+/).filter(Boolean);
+  if(!words.length) return GAMES.slice();
+  return GAMES.filter(g=>{const h=hay(g);return words.every(w=>h.includes(w))})
+    .sort((a,b)=>(norm(b.title).startsWith(words[0])?1:0)-(norm(a.title).startsWith(words[0])?1:0));
+}
+function art(g){return g.thumb?`<img src="${g.thumb}" alt="" loading="lazy">`:g.icon||'🎮'}
+function bg(g){return g.thumb?'':`background:linear-gradient(145deg,${(g.c||['#6fd3c0','#2c7d78'])[0]},${(g.c||['#6fd3c0','#2c7d78'])[1]})`}
+
+function renderCats(){
+  const cats=['Alle',...new Set(GAMES.map(g=>g.cat))];
+  if(GAMES.some(g=>g.badge==='Neu')) cats.splice(1,0,'Neu');
+  if(GAMES.some(g=>g.badge==='Beliebt')) cats.splice(cats.includes('Neu')?2:1,0,'Beliebt');
+  const icons={...CAT_ICONS,Alle:'🌲',Neu:'🌟',Beliebt:'🔥'};
+  $('cats').innerHTML='<a class="logo" href="#"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 8 20h6L6 31h11v6h6v-6h11l-8-11h6z" fill="#7bc96f"/><circle cx="31" cy="9" r="3" fill="#f4d35e"/></svg>Irrwald</a>'+
+    cats.map(c=>`<button class="cat" data-c="${c}" aria-pressed="${c===cat}"><span aria-hidden="true">${icons[c]||'🎮'}</span>${c}</button>`).join('');
+  $('lucky').hidden=GAMES.length<2;
+}
+function inCat(g){return cat==='Alle'||g.cat===cat||g.badge===cat}
+
+function renderGrid(){
+  const list=search(term).filter(inCat);
+  $('title').firstChild.textContent=term?`Ergebnisse für „${term}“ `:(cat==='Alle'?'Alle Spiele ':cat+' ');
+  $('count').textContent=GAMES.length?`${list.length} ${list.length===1?'Spiel':'Spiele'}`:'';
+  $('grid').innerHTML=list.map(g=>`
+    <button class="tile${g.big?' big':''}" data-id="${g.id}" aria-label="${g.title} spielen">
+      <span class="art" style="${bg(g)}" aria-hidden="true">${art(g)}</span>
+      ${g.badge?`<span class="badge">${g.badge}</span>`:''}
+      <span class="name">${g.title}</span>
+    </button>`).join('');
+  const m=$('msg');
+  if(!GAMES.length){
+    m.innerHTML=`<div class="empty">
+      <svg viewBox="0 0 320 130" aria-hidden="true"><g fill="#1c4a3c"><path d="M30 120 52 62 74 120z"/><path d="M60 120 90 40 120 120z"/><path d="M110 120 135 55 160 120z"/><path d="M150 120 182 30 214 120z"/><path d="M205 120 228 62 251 120z"/><path d="M240 120 268 48 296 120z"/></g><rect x="0" y="118" width="320" height="4" rx="2" fill="#25493e"/><circle cx="108" cy="40" r="3.5" fill="#f4d35e"/><circle cx="214" cy="66" r="3" fill="#f4d35e"/><circle cx="262" cy="30" r="2.5" fill="#f4d35e"/><circle cx="60" cy="72" r="2.5" fill="#f4d35e"/></svg>
+      <h3>Die ersten Spiele ziehen ein</h3><p>Schau bald wieder vorbei. Hier erscheinen alle Spiele, sortiert nach Kategorien.</p></div>`;
+  } else if(!list.length){
+    m.innerHTML=`<div class="empty"><h3>Nichts gefunden</h3><p>${term?`Zu „${term}“ gibt es kein Spiel.`:'In dieser Kategorie gibt es noch kein Spiel.'} Probier einen anderen Begriff oder eine andere Kategorie.</p><button class="btn reset" id="reset">Alle Spiele zeigen</button></div>`;
+  } else m.innerHTML='';
+}
+function renderRecent(){
+  let ids=[]; try{ids=JSON.parse(localStorage.getItem('irrwald:recent')||'[]')}catch(_){}
+  const list=ids.map(i=>GAMES.find(g=>g.id===i)).filter(Boolean);
+  $('recent').innerHTML=(list.length&&!term&&cat==='Alle')?`<h2>Zuletzt gespielt</h2><div class="grid">${list.map(g=>`
+    <button class="tile" data-id="${g.id}" aria-label="${g.title} spielen"><span class="art" style="${bg(g)}" aria-hidden="true">${art(g)}</span><span class="name">${g.title}</span></button>`).join('')}</div>`:'';
+}
+function renderHero(){const g=GAMES.find(x=>x.featured)||GAMES[0];$('cta').innerHTML=g?`<button class="cta" data-id="${g.id}">▶ ${g.title} spielen</button>`:''}
+function renderAll(){renderCats();renderGrid();renderRecent();renderHero()}
+
+/* Suche */
+function renderSug(){
+  const ul=$('sug'), inp=$('q');
+  sugList=term?search(term).slice(0,6):[];
+  active=-1;
+  ul.innerHTML=sugList.map((g,i)=>`<li role="option" id="s${i}" data-id="${g.id}" aria-selected="false"><span class="ic" style="${bg(g)}">${art(g)}</span><span><b>${g.title}</b><small>${g.cat}</small></span></li>`).join('');
+  const open=sugList.length>0;
+  ul.classList.toggle('open',open); inp.setAttribute('aria-expanded',open);
+}
+function setActive(n){
+  active=n;
+  sugList.forEach((_,i)=>$('s'+i).setAttribute('aria-selected',i===n));
+  $('q').setAttribute('aria-activedescendant',n>=0?'s'+n:'');
+}
+function closeSug(){$('sug').classList.remove('open');$('q').setAttribute('aria-expanded','false')}
+$('q').addEventListener('input',e=>{
+  term=e.target.value.trim();
+  $('sbox').classList.toggle('has',!!e.target.value);
+  renderSug(); renderGrid(); renderRecent();
+});
+$('q').addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'&&sugList.length){e.preventDefault();setActive((active+1)%sugList.length)}
+  else if(e.key==='ArrowUp'&&sugList.length){e.preventDefault();setActive((active-1+sugList.length)%sugList.length)}
+  else if(e.key==='Enter'){ if(active>=0) openGame(sugList[active]); else if(sugList.length===1) openGame(sugList[0]); else closeSug(); }
+  else if(e.key==='Escape'){closeSug()}
+});
+$('sug').addEventListener('mousedown',e=>{const li=e.target.closest('li');if(li){e.preventDefault();openGame(GAMES.find(g=>g.id===li.dataset.id))}});
+$('q').addEventListener('blur',()=>setTimeout(closeSug,120));
+$('q').addEventListener('focus',()=>{if(term)renderSug()});
+$('clear').addEventListener('click',()=>{const q=$('q');q.value='';term='';$('sbox').classList.remove('has');closeSug();renderGrid();renderRecent();q.focus()});
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)&&!$('player').classList.contains('open')){e.preventDefault();$('q').focus()}
+  if(e.key==='Escape'&&$('player').classList.contains('open')) closeGame();
+});
+
+$('cats').addEventListener('click',e=>{const b=e.target.closest('.cat');if(!b)return;cat=b.dataset.c;renderAll()});
+$('msg').addEventListener('click',e=>{if(e.target.id==='reset'){cat='Alle';term='';$('q').value='';$('sbox').classList.remove('has');renderAll()}});
+document.querySelector('main').addEventListener('click',e=>{const t=e.target.closest('.tile,.cta');if(t)openGame(GAMES.find(g=>g.id===t.dataset.id))});
+$('lucky').addEventListener('click',()=>openGame(GAMES[Math.floor(Math.random()*GAMES.length)]));
+
+/* Player */
+let lastFocus=null;
+function openGame(g){
+  if(!g) return;
+  lastFocus=document.activeElement; closeSug();
+  $('ptitle').textContent=g.title;
+  const st=$('stage'); st.innerHTML='';
+  const f=document.createElement('iframe');
+  f.title=g.title; f.allow='fullscreen; gamepad; autoplay';
+  f.setAttribute('sandbox','allow-scripts allow-same-origin allow-pointer-lock allow-popups');
+  if(g.src) f.src=g.src; else f.srcdoc=g.html||'';
+  st.appendChild(f);
+  $('player').classList.add('open'); document.body.style.overflow='hidden'; $('back').focus();
+  try{const r=JSON.parse(localStorage.getItem('irrwald:recent')||'[]').filter(i=>i!==g.id);r.unshift(g.id);localStorage.setItem('irrwald:recent',JSON.stringify(r.slice(0,6)))}catch(_){}
+}
+function closeGame(){
+  $('player').classList.remove('open'); $('stage').innerHTML=''; document.body.style.overflow='';
+  renderRecent(); if(lastFocus) lastFocus.focus();
+}
+$('back').addEventListener('click',closeGame);
+$('full').addEventListener('click',()=>{const el=$('stage');try{(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(_){}});
+
+renderAll();
+</script>
+</body>
+</html>
