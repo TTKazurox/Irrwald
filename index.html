@@ -3,146 +3,139 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1730">
+<meta name="description" content="Irrwald: kostenlose Browserspiele ohne Download. Aussuchen, anklicken, losspielen.">
 <title>Irrwald – Kostenlose Spiele online spielen</title>
 <style>
 :root{
-  --bg:#0b1b16; --panel:#122a23; --panel2:#19382f; --line:#25493e;
-  --text:#eef5ee; --muted:#9bb8ac; --glow:#f4d35e; --ink:#1b2a10; --berry:#ec5f4b; --fog:#6fd3c0;
+  --bg:#0f1730; --bg2:#172352; --card:#1f2f66; --text:#f3f6ff; --muted:#a3b3e0;
+  --glow:#ffd23f; --ink:#2a1f00; --mint:#3de0b0; --pink:#ff5d8f;
   --head:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS","Segoe UI",system-ui,sans-serif;
   --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-  color-scheme:dark;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark;
 }
-@media (prefers-color-scheme:light){
-  :root:not([data-theme="dark"]){
-    --bg:#eef4ec; --panel:#fff; --panel2:#e1ede5; --line:#c9dccf;
-    --text:#13302a; --muted:#4f6e63; --glow:#f0c53d; --fog:#1f8f7c; color-scheme:light;
-  }
-}
-:root[data-theme="dark"]{color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;min-height:100%;color:var(--text);font:600 16px/1.5 var(--body);
-  background:radial-gradient(900px 420px at 70% -80px,color-mix(in srgb,var(--fog) 16%,transparent),transparent) no-repeat,var(--bg)}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+  background:radial-gradient(640px 420px at 88% -40px,rgba(255,93,143,.22),transparent) no-repeat,
+             radial-gradient(760px 520px at -6% 26%,rgba(61,224,176,.15),transparent) no-repeat,var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:80}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--glow);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-.app{display:grid;grid-template-columns:104px 1fr;min-height:100vh}
-.side{position:sticky;top:0;height:100vh;padding:14px 10px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;overflow-y:auto}
-.logo{display:block;text-align:center;font:800 19px/1 var(--head);color:var(--glow);padding:4px 0 14px;text-decoration:none}
-.logo svg{display:block;margin:0 auto 6px}
-.cat{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border:0;border-radius:16px;background:transparent;color:var(--muted);font-size:13px;font-weight:800;transition:background .15s,color .15s}
-.cat span{font-size:24px;line-height:1.1}
-.cat:hover{background:var(--panel2);color:var(--text)}
-.cat[aria-pressed="true"]{background:var(--glow);color:var(--ink);box-shadow:0 8px 20px rgba(244,211,94,.25)}
-
-main{min-width:0;padding:0 clamp(14px,3vw,32px) 56px}
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;display:flex;gap:12px;align-items:center;padding:16px 0 14px;background:linear-gradient(var(--bg) 80%,transparent)}
-.search{position:relative;flex:1;max-width:640px}
+.hd{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;display:flex;align-items:center;gap:18px;padding:12px 24px;background:rgba(15,23,48,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;font:800 27px/1 var(--head);letter-spacing:-.01em}
+.brand span{background:linear-gradient(90deg,var(--glow),var(--mint));-webkit-background-clip:text;background-clip:text;color:transparent}
+.search{position:relative;flex:1;max-width:620px}
 .search svg{position:absolute;left:18px;top:50%;translate:0 -50%;color:var(--muted);pointer-events:none}
-.search input{width:100%;padding:14px 48px 14px 50px;border-radius:999px;border:2px solid var(--line);background:var(--panel);color:var(--text);font:700 16px var(--body);transition:border-color .15s,box-shadow .15s}
+.search input{width:100%;height:46px;padding:0 48px 0 50px;border:0;border-radius:999px;background:var(--bg2);color:var(--text);font:700 16px var(--body);transition:box-shadow .15s,background .15s}
 .search input::placeholder{color:var(--muted)}
 .search input::-webkit-search-cancel-button{display:none}
-.search input:focus{border-color:var(--fog);outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--fog) 25%,transparent)}
-.clear{position:absolute;right:10px;top:50%;translate:0 -50%;width:30px;height:30px;border:0;border-radius:50%;background:var(--panel2);color:var(--muted);display:none;line-height:1}
+.search input:focus{outline:none;background:var(--card);box-shadow:0 0 0 3px var(--mint)}
+.clear{position:absolute;right:9px;top:50%;translate:0 -50%;width:30px;height:30px;border:0;border-radius:50%;background:var(--card);color:var(--muted);display:none}
 .search.has .clear{display:block}
-.kbd{position:absolute;right:16px;top:50%;translate:0 -50%;padding:1px 8px;border:1px solid var(--line);border-radius:6px;color:var(--muted);font-size:13px}
+.kbd{position:absolute;right:16px;top:50%;translate:0 -50%;padding:0 9px;border-radius:7px;background:var(--card);color:var(--muted);font-size:13px}
 .search.has .kbd,.search:focus-within .kbd{display:none}
-.sug{position:absolute;inset:calc(100% + 8px) 0 auto;margin:0;padding:6px;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 40px rgba(0,0,0,.4);display:none;overflow:hidden}
+.sug{position:absolute;inset:calc(100% + 8px) 0 auto;margin:0;padding:6px;list-style:none;background:var(--bg2);border-radius:22px;box-shadow:0 22px 50px rgba(0,0,0,.5);display:none}
 .sug.open{display:block}
-.sug li{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:14px;cursor:pointer}
-.sug li[aria-selected="true"],.sug li:hover{background:var(--panel2)}
-.sug .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none;overflow:hidden}
+.sug li{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:16px;cursor:pointer}
+.sug li[aria-selected="true"],.sug li:hover{background:var(--card)}
+.sug .ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:22px;flex:none;overflow:hidden}
 .sug .ic img{width:100%;height:100%;object-fit:cover}
 .sug b{display:block;font:700 16px var(--head)}
 .sug small{color:var(--muted)}
-.lucky{margin-left:auto;padding:11px 18px;border-radius:999px;border:2px solid var(--line);background:var(--panel);font-weight:800;white-space:nowrap}
-.lucky:hover{border-color:var(--glow)}
+.lucky{margin-left:auto;height:46px;padding:0 20px;border:0;border-radius:999px;background:var(--bg2);font-weight:800;white-space:nowrap;transition:background .15s,transform .15s}
+.lucky:hover{background:var(--card);transform:translateY(-1px)}
 
-.hero{position:relative;overflow:hidden;isolation:isolate;margin:6px 0 4px;padding:clamp(28px,5vw,54px) clamp(20px,4vw,46px) clamp(84px,11vw,130px);border-radius:30px;background:linear-gradient(135deg,#1d5240,#10302618 0),linear-gradient(135deg,#1d5240,#0f2b23 62%,#0b1f19);border:1px solid var(--line)}
-.hero h1{font:800 clamp(32px,5.4vw,60px)/1.04 var(--head);margin:0 0 12px;max-width:13ch;color:#fff}
-.hero p{margin:0;max-width:44ch;color:#bcd6ca;font-size:18px}
-.hero.feat{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(18px,3vw,40px);align-items:center;padding-bottom:clamp(92px,11vw,132px)}
-.hero .hmedia{position:relative;display:block;width:100%;aspect-ratio:16/9;border:0;padding:0;border-radius:22px;overflow:hidden;background:#0a1a15;box-shadow:0 0 0 1px rgba(255,255,255,.16),0 24px 50px rgba(0,0,0,.5);transform:rotate(1.2deg);transition:transform .25s}
-.hero .hmedia:hover{transform:rotate(0) scale(1.02)}
-.hmedia img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.mtag{position:absolute;left:12px;top:12px;z-index:2;padding:3px 11px;border-radius:999px;background:var(--berry);color:#fff;font:800 12px var(--head)}
-.vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s;pointer-events:none}
-.vid.on{opacity:1}
-@media (max-width:760px){.hero.feat{grid-template-columns:1fr}.hero .hmedia{transform:none}}
-.cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:14px 26px;border:0;border-radius:999px;background:var(--glow);color:var(--ink);font:800 18px var(--head);box-shadow:0 10px 26px rgba(244,211,94,.32);transition:transform .15s}
-.cta:hover{transform:translateY(-2px)}
-.trees{position:absolute;inset:auto 0 0;width:100%;height:clamp(64px,10vw,116px);z-index:-1}
-.fly{position:absolute;width:6px;height:6px;border-radius:50%;background:#f4d35e;box-shadow:0 0 12px 4px rgba(244,211,94,.55);z-index:-1;animation:fly 7s ease-in-out infinite}
-@keyframes fly{0%,100%{transform:translate(0,0);opacity:.15}50%{transform:translate(20px,-28px);opacity:1}}
-h2{display:flex;align-items:baseline;gap:10px;font:700 22px var(--head);margin:30px 0 14px}
-h2 small{font:700 14px var(--body);color:var(--muted)}
+.app{display:grid;grid-template-columns:96px 1fr;align-items:start}
+.rail{position:sticky;top:calc(76px + env(safe-area-inset-top,0px));margin:6px 0 0 16px;padding:8px;background:var(--bg2);border-radius:26px;display:flex;flex-direction:column;gap:4px;max-height:calc(100vh - 100px);overflow-y:auto;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.cat{display:flex;flex-direction:column;align-items:center;gap:1px;padding:9px 2px;border:0;border-radius:18px;background:transparent;color:var(--muted);font-size:11.5px;font-weight:800;transition:background .15s,color .15s,transform .15s}
+.cat span{font-size:23px;line-height:1.15}
+.cat:hover{background:var(--card);color:var(--text)}
+.cat[aria-pressed="true"]{background:linear-gradient(160deg,#ffe277,#ffb62e);color:var(--ink);box-shadow:0 8px 20px rgba(255,190,50,.3)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-flow:dense;gap:14px}
-.tile{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:24px;overflow:hidden;background:var(--panel2);isolation:isolate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 6px 16px rgba(0,0,0,.22);transition:transform .18s,box-shadow .18s}
-.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.24),transparent 42%);pointer-events:none}
+main{min-width:0;padding:8px clamp(14px,2.6vw,30px) 56px}
+
+.hero{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;min-height:clamp(250px,29vw,330px);border-radius:30px;background:linear-gradient(115deg,#2c3f94 0%,#18255a 55%,#121b45);box-shadow:0 18px 44px rgba(0,0,0,.35)}
+.hbg{position:absolute;inset:0 0 0 auto;width:66%;z-index:-1;cursor:pointer;-webkit-mask-image:linear-gradient(90deg,transparent,#000 42%);mask-image:linear-gradient(90deg,transparent,#000 42%)}
+.hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.htxt{padding:28px clamp(22px,4vw,52px);max-width:50%}
+.eyebrow{display:inline-block;padding:4px 13px;border-radius:999px;background:rgba(255,255,255,.14);font:800 12px var(--head);letter-spacing:.08em;text-transform:uppercase}
+.ht{margin:12px 0 8px;font:800 clamp(34px,5vw,58px)/1 var(--head);letter-spacing:-.02em}
+.htxt p{margin:0 0 20px;color:#cdd8fb;max-width:36ch}
+.cta{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:0;border-radius:999px;background:linear-gradient(160deg,#ffe277,#ffb62e);color:var(--ink);font:800 18px var(--head);box-shadow:0 12px 28px rgba(255,190,50,.38);transition:transform .15s,box-shadow .15s}
+.cta:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 16px 34px rgba(255,190,50,.5)}
+
+h2.sec,#title{display:flex;align-items:center;gap:10px;font:800 23px var(--head);margin:32px 4px 14px}
+#title small,h2.sec small{padding:2px 11px;border-radius:999px;background:var(--bg2);color:var(--muted);font:700 13px var(--body)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-flow:dense;gap:16px}
+.tile{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:24px;overflow:hidden;background:var(--card);isolation:isolate;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:transform .2s cubic-bezier(.3,1.4,.5,1),box-shadow .2s}
 .tile.big{grid-column:span 2;grid-row:span 2}
 .tile .art{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(46px,7vw,72px);z-index:-1}
-.tile.big .art{font-size:clamp(90px,13vw,150px)}
 .tile .art img{width:100%;height:100%;object-fit:cover}
-.tile .name{position:absolute;inset:auto 0 0;padding:30px 12px 11px;text-align:left;font:700 17px/1.15 var(--head);background:linear-gradient(transparent,rgba(5,15,12,.9));color:#fff;transform:translateY(100%);transition:transform .18s}
-.tile.big .name{font-size:24px;padding:44px 18px 16px}
-.tile:hover,.tile:focus-visible{transform:scale(1.045);box-shadow:0 0 0 3px var(--glow),0 14px 32px rgba(0,0,0,.4);z-index:2}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.2),transparent 40%);pointer-events:none}
+.tile .name{position:absolute;inset:auto 0 0;padding:34px 14px 12px;text-align:left;font:800 18px/1.15 var(--head);background:linear-gradient(transparent,rgba(8,12,32,.92));color:#fff;transform:translateY(100%);transition:transform .2s}
+.tile:hover,.tile:focus-visible{transform:scale(1.07) rotate(-.6deg);box-shadow:0 18px 40px rgba(255,210,63,.32);z-index:2}
 .tile:hover .name,.tile:focus-visible .name{transform:none}
 @media (hover:none){.tile .name{transform:none}}
-.badge{position:absolute;top:10px;left:10px;z-index:3;padding:3px 10px;border-radius:999px;font:800 12px var(--head);background:var(--berry);color:#fff}
+.badge{position:absolute;top:10px;left:10px;z-index:3;padding:3px 11px;border-radius:999px;font:800 12px var(--head);background:var(--pink);color:#fff;box-shadow:0 4px 12px rgba(255,93,143,.45)}
+.vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s;pointer-events:none}
+.vid.on{opacity:1}
 
-.empty{margin:28px 0;padding:44px 20px 36px;text-align:center;border:2px dashed var(--line);border-radius:28px;background:color-mix(in srgb,var(--panel) 60%,transparent)}
+.empty{margin:20px 0;padding:42px 20px 34px;text-align:center;border-radius:28px;background:var(--bg2)}
 .empty svg{width:min(320px,70%);height:auto}
+.empty svg g{fill:#26397f}.empty svg rect{fill:#2f4496}
 .empty h3{font:800 26px var(--head);margin:10px 0 4px}
 .empty p{margin:0 auto;max-width:44ch;color:var(--muted)}
-.btn{padding:9px 18px;border-radius:999px;border:2px solid var(--line);background:var(--panel2)}
-.btn:hover{border-color:var(--glow)}
+.btn{padding:9px 20px;border:0;border-radius:999px;background:var(--card);font-weight:800;transition:background .15s}
+.btn:hover{background:#2b4090}
 .reset{margin-top:14px}
-footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer{margin-top:60px;color:var(--muted);font-size:14px}
 
-.player{position:fixed;inset:0;z-index:70;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.player{position:fixed;inset:0;z-index:90;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 .player.open{display:flex}
-.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
-.bar h3{font:700 20px var(--head);margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stage{flex:1;min-height:0;display:grid;place-items:center;background:#050e0b}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bg2)}
+.bar h3{font:800 20px var(--head);margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage{flex:1;min-height:0;display:grid;place-items:center;background:#060a1c}
 .stage iframe{width:100%;height:100%;border:0;background:#000}
 
 @media (max-width:760px){
+  .hd{gap:10px;padding:10px 14px}
+  .brand{font-size:22px}.brand svg{width:26px;height:26px}
+  .lucky,.kbd{display:none}
   .app{grid-template-columns:1fr}
-  .side{position:fixed;inset:auto 0 0;height:auto;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));border:0;border-top:1px solid var(--line);z-index:50;gap:2px;overflow-x:auto;overflow-y:hidden}
-  .logo{display:none}
-  .cat{flex:0 0 auto;min-width:68px;padding:6px 8px;font-size:12px}
+  .rail{position:fixed;inset:auto 10px calc(10px + env(safe-area-inset-bottom,0px));z-index:70;margin:0;flex-direction:row;max-height:none;overflow-x:auto;overflow-y:hidden;padding:6px;gap:2px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+  .cat{flex:0 0 auto;min-width:66px;padding:6px 8px}
   .cat span{font-size:20px}
   main{padding-bottom:110px}
-  .lucky,.kbd{display:none}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px}
+  .hero{min-height:250px;align-items:flex-end}
+  .hbg{width:100%;-webkit-mask-image:linear-gradient(0deg,transparent 10%,#000 85%);mask-image:linear-gradient(0deg,transparent 10%,#000 85%);opacity:.42}
+  .htxt{max-width:none;padding:110px 22px 22px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:11px}
+  .tile{border-radius:20px}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}.fly{animation:none;opacity:.7}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
+<header class="hd">
+  <a class="brand" href="#" aria-label="Irrwald Startseite"><svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 8 20h6L6 31h11v6h6v-6h11l-8-11h6z" fill="#3de0b0"/><circle cx="31" cy="9" r="3.4" fill="#ffd23f"/></svg><span>Irrwald</span></a>
+  <div class="search" id="sbox">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Spiele suchen …" aria-label="Spiele suchen" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug">
+    <span class="kbd" aria-hidden="true">/</span>
+    <button class="clear" id="clear" aria-label="Suche leeren">✕</button>
+    <ul class="sug" id="sug" role="listbox"></ul>
+  </div>
+  <button class="lucky" id="lucky" hidden>🎲 Zufallsspiel</button>
+</header>
 <div class="app">
-  <nav class="side" aria-label="Kategorien" id="cats"></nav>
+  <nav class="rail" aria-label="Kategorien" id="cats"></nav>
   <main>
-    <div class="top">
-      <div class="search" id="sbox">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Spiele suchen …" aria-label="Spiele suchen" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug">
-        <span class="kbd" aria-hidden="true">/</span>
-        <button class="clear" id="clear" aria-label="Suche leeren">✕</button>
-        <ul class="sug" id="sug" role="listbox"></ul>
-      </div>
-      <button class="lucky" id="lucky" hidden>🎲 Zufallsspiel</button>
-    </div>
-    <section class="hero">
-      <span class="fly" style="left:58%;top:18%"></span><span class="fly" style="left:72%;top:38%;animation-delay:-2s"></span><span class="fly" style="left:84%;top:20%;animation-delay:-4s"></span><span class="fly" style="left:46%;top:46%;animation-delay:-1s"></span><span class="fly" style="left:91%;top:52%;animation-delay:-5s"></span><span class="fly" style="left:66%;top:60%;animation-delay:-3s"></span>
-      <div class="htext"><h1>Verirr dich in neuen Spielen</h1>
-      <p>Kostenlose Browserspiele ohne Download. Aussuchen, anklicken, losspielen.</p>
-      <div id="cta"></div></div><div id="hmedia"></div>
-      <svg class="trees" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="t1" width="70" height="100" x="25" patternUnits="userSpaceOnUse"><path d="M35 10 10 100h50z" fill="#123a2f"/></pattern><pattern id="t2" width="56" height="100" patternUnits="userSpaceOnUse"><path d="M28 32 4 100h48z" fill="#0a1a15"/></pattern></defs><rect width="1200" height="100" fill="url(#t1)"/><rect width="1200" height="100" fill="url(#t2)"/></svg>
-    </section>
+    <h1 class="sr">Irrwald – kostenlose Browserspiele</h1>
+    <section class="hero" id="hero"></section>
     <div id="recent"></div>
     <h2 id="title">Alle Spiele <small id="count"></small></h2>
     <div class="grid" id="grid"></div>
@@ -150,16 +143,10 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:v
     <footer>© 2026 Irrwald</footer>
   </main>
 </div>
-
 <div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="ptitle">
-  <div class="bar">
-    <button class="btn" id="back">‹ Zurück</button>
-    <h3 id="ptitle"></h3>
-    <button class="btn" id="full">Vollbild</button>
-  </div>
+  <div class="bar"><button class="btn" id="back">‹ Zurück</button><h3 id="ptitle"></h3><button class="btn" id="full">Vollbild</button></div>
   <div class="stage" id="stage"></div>
 </div>
-
 <script>
 /* ============ SPIELE ============
    Ein Spiel hinzufügen = einen Eintrag in diese Liste setzen:
@@ -168,7 +155,7 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:v
     src:'Link zum Spiel'  ODER  html:'kompletter Spiel-Code'} */
 const GAMES = [
   {id:'blockbow', title:'Blockbow', cat:'Puzzle', tags:['bloecke','linien','denken','tetris'], icon:'🏹',
-   c:['#3b4bb8','#141a52'], badge:'Neu', big:true, featured:true, src:'blockbow.html',
+   c:['#3b4bb8','#141a52'], badge:'Neu', featured:true, desc:'Knobelspiel mit Blöcken in drei Schwierigkeitsstufen. Kostenlos im Browser.', src:'blockbow.html',
    thumb:'blockbow-square.webp', video:'blockbow-portrait.mp4',
    cover:'blockbow-landscape.webp', coverVideo:'blockbow-landscape.mp4'}
 ];
@@ -193,8 +180,7 @@ function renderCats(){
   if(GAMES.some(g=>g.badge==='Neu')) cats.splice(1,0,'Neu');
   if(GAMES.some(g=>g.badge==='Beliebt')) cats.splice(cats.includes('Neu')?2:1,0,'Beliebt');
   const icons={...CAT_ICONS,Alle:'🌲',Neu:'🌟',Beliebt:'🔥'};
-  $('cats').innerHTML='<a class="logo" href="#"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 8 20h6L6 31h11v6h6v-6h11l-8-11h6z" fill="#7bc96f"/><circle cx="31" cy="9" r="3" fill="#f4d35e"/></svg>Irrwald</a>'+
-    cats.map(c=>`<button class="cat" data-c="${c}" aria-pressed="${c===cat}"><span aria-hidden="true">${icons[c]||'🎮'}</span>${c}</button>`).join('');
+  $('cats').innerHTML=cats.map(c=>`<button class="cat" data-c="${c}" aria-pressed="${c===cat}"><span aria-hidden="true">${icons[c]||'🎮'}</span>${c}</button>`).join('');
   $('lucky').hidden=GAMES.length<2;
 }
 function inCat(g){return cat==='Alle'||g.cat===cat||g.badge===cat}
@@ -227,13 +213,12 @@ function renderRecent(){
 const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches||!!(navigator.connection&&navigator.connection.saveData);
 function vid(src){const v=document.createElement('video');v.className='vid';v.src=src;v.muted=true;v.loop=true;v.playsInline=true;v.preload='none';v.setAttribute('aria-hidden','true');return v}
 function renderHero(){
-  const g=GAMES.find(x=>x.featured)||GAMES[0], h=document.querySelector('.hero'), m=$('hmedia');
-  $('cta').innerHTML=g?`<button class="cta" data-id="${g.id}">▶ ${g.title} spielen</button>`:'';
-  if(g&&g.cover){
-    h.classList.add('feat');
-    m.innerHTML=`<button class="hmedia" data-id="${g.id}" aria-label="${g.title} spielen"><img src="${g.cover}" alt="">${g.badge?`<span class="mtag">${g.badge}</span>`:''}</button>`;
-    if(g.coverVideo&&!REDUCE){const v=vid(g.coverVideo);v.preload='metadata';m.firstChild.appendChild(v);v.play().then(()=>v.classList.add('on')).catch(()=>{})}
-  }else{h.classList.remove('feat');m.innerHTML=''}
+  const g=GAMES.find(x=>x.featured)||GAMES[0], h=$('hero');
+  if(!g){h.innerHTML='<div class="htxt"><span class="eyebrow">Willkommen</span><h2 class="ht">Verirr dich in neuen Spielen</h2><p>Kostenlose Browserspiele ohne Download.</p></div>';return}
+  h.innerHTML=`<div class="hbg hmedia" data-id="${g.id}">${g.cover?`<img src="${g.cover}" alt="">`:''}</div>
+    <div class="htxt"><span class="eyebrow">${g.badge||'Empfohlen'} · ${g.cat}</span><h2 class="ht">${g.title}</h2>
+    <p>${g.desc||'Kostenlos im Browser spielen.'}</p><button class="cta" data-id="${g.id}">▶ Jetzt spielen</button></div>`;
+  if(g.coverVideo&&!REDUCE){const v=vid(g.coverVideo);v.preload='metadata';h.querySelector('.hbg').appendChild(v);v.play().then(()=>v.classList.add('on')).catch(()=>{})}
 }
 let hov=null,hovT=null;
 function tileOn(t){const g=GAMES.find(x=>x.id===t.dataset.id);if(!g||!g.video||REDUCE)return;
