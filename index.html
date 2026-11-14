@@ -8,6 +8,14 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="description" content="Irrwald: kostenlose Browserspiele ohne Download. Aussuchen, anklicken, losspielen.">
+<link rel="canonical" href="https://irrwald.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Irrwald">
+<meta property="og:title" content="Irrwald – Kostenlose Spiele online spielen">
+<meta property="og:description" content="Kostenlose Browserspiele ohne Download. Aussuchen, anklicken, losspielen.">
+<meta property="og:url" content="https://irrwald.com/">
+<meta property="og:image" content="https://irrwald.com/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <title>Irrwald – Kostenlose Spiele online spielen</title>
 <style>
 :root{
@@ -73,8 +81,8 @@ main{min-width:0;width:100%;max-width:1480px;margin-inline:auto;padding:8px clam
 h2.sec,#title{display:flex;align-items:center;gap:10px;font:800 23px var(--head);margin:32px 4px 14px}
 #title small,h2.sec small{padding:2px 11px;border-radius:999px;background:var(--bg2);color:var(--muted);font:700 13px var(--body)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-flow:dense;gap:16px}
-.tile{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:24px;overflow:hidden;background:var(--card);isolation:isolate;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:transform .2s cubic-bezier(.3,1.4,.5,1),box-shadow .2s}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-flow:dense;align-items:start;gap:16px}
+.tile{position:relative;aspect-ratio:var(--r,1/1);border:0;padding:0;border-radius:24px;overflow:hidden;background:var(--card);isolation:isolate;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:transform .2s cubic-bezier(.3,1.4,.5,1),box-shadow .2s}
 .tile.big{grid-column:span 2;grid-row:span 2}
 .tile .art{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(46px,7vw,72px);z-index:-1}
 .tile .art img{width:100%;height:100%;object-fit:cover}
@@ -86,9 +94,6 @@ h2.sec,#title{display:flex;align-items:center;gap:10px;font:800 23px var(--head)
 .badge{position:absolute;top:10px;left:10px;z-index:3;padding:3px 11px;border-radius:999px;font:800 12px var(--head);background:var(--pink);color:#fff;box-shadow:0 4px 12px rgba(255,93,143,.45)}
 .vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s;pointer-events:none}
 .vid.on{opacity:1}
-.tile .vid{object-fit:contain}
-.tile .art img{transition:filter .35s,transform .35s}
-.tile.vp .art img{filter:blur(14px) brightness(.55);transform:scale(1.3)}
 
 .empty{margin:20px 0;padding:42px 20px 34px;text-align:center;border-radius:28px;background:var(--bg2)}
 .empty svg{width:min(320px,70%);height:auto}
@@ -132,6 +137,7 @@ a.lucky{display:inline-flex;align-items:center;color:var(--text);text-decoration
 </style>
 </head>
 <body>
+<noscript><p style="padding:24px;text-align:center;color:#fff">Irrwald braucht JavaScript, damit die Spiele laufen. Bitte aktiviere es in deinem Browser.</p></noscript>
 <header class="hd">
   <a class="brand" href="#" aria-label="Irrwald Startseite"><svg width="32" height="32" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 8 20h6L6 31h11v6h6v-6h11l-8-11h6z" fill="#3de0b0"/><circle cx="31" cy="9" r="3.4" fill="#ffd23f"/></svg><span>Irrwald</span></a>
   <div class="search" id="sbox">
@@ -168,7 +174,7 @@ a.lucky{display:inline-flex;align-items:center;color:var(--text);text-decoration
 const GAMES = [
   {id:'blockbow', title:'Blockbow', cat:'Puzzle', tags:['bloecke','linien','denken','tetris'], icon:'🏹',
    c:['#3b4bb8','#141a52'], badge:'Neu', featured:true, desc:'Knobelspiel mit Blöcken in drei Schwierigkeitsstufen. Kostenlos im Browser.', src:'blockbow.html',
-   thumb:'blockbow-square.webp', video:'blockbow-portrait.mp4',
+   thumb:'blockbow-portrait.webp', ratio:'2/3', video:'blockbow-portrait.mp4',
    cover:'blockbow-landscape.webp', coverVideo:'blockbow-landscape.mp4'}
 ];
 
@@ -202,7 +208,7 @@ function renderGrid(){
   $('title').firstChild.textContent=term?`Ergebnisse für „${term}“ `:(cat==='Alle'?'Alle Spiele ':cat+' ');
   $('count').textContent=GAMES.length?`${list.length} ${list.length===1?'Spiel':'Spiele'}`:'';
   $('grid').innerHTML=list.map(g=>`
-    <button class="tile${g.big?' big':''}" data-id="${g.id}" aria-label="${g.title} spielen">
+    <button class="tile${g.big?' big':''}" style="--r:${g.ratio||'1/1'}" data-id="${g.id}" aria-label="${g.title} spielen">
       <span class="art" style="${bg(g)}" aria-hidden="true">${art(g)}</span>
       ${g.badge?`<span class="badge">${g.badge}</span>`:''}
       <span class="name">${g.title}</span>
@@ -220,7 +226,7 @@ function renderRecent(){
   let ids=[]; try{ids=JSON.parse(localStorage.getItem('irrwald:recent')||'[]')}catch(_){}
   const list=ids.map(i=>GAMES.find(g=>g.id===i)).filter(Boolean);
   $('recent').innerHTML=(list.length&&!term&&cat==='Alle')?`<h2>Zuletzt gespielt</h2><div class="grid">${list.map(g=>`
-    <button class="tile" data-id="${g.id}" aria-label="${g.title} spielen"><span class="art" style="${bg(g)}" aria-hidden="true">${art(g)}</span><span class="name">${g.title}</span></button>`).join('')}</div>`:'';
+    <button class="tile" style="--r:${g.ratio||'1/1'}" data-id="${g.id}" aria-label="${g.title} spielen"><span class="art" style="${bg(g)}" aria-hidden="true">${art(g)}</span><span class="name">${g.title}</span></button>`).join('')}</div>`:'';
 }
 const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches||!!(navigator.connection&&navigator.connection.saveData);
 function vid(src){const v=document.createElement('video');v.className='vid';v.src=src;v.muted=true;v.loop=true;v.playsInline=true;v.preload='none';v.setAttribute('aria-hidden','true');return v}

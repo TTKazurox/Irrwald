@@ -1,5 +1,5 @@
-const V='irrwald-v1';
-const SHELL=['./','index.html','kontakt.html','impressum.html','datenschutz.html','blockbow.html','blockbow-square.webp','blockbow-landscape.webp','icon-192.png','manifest.webmanifest'];
+const V='irrwald-v2';
+const SHELL=['./','index.html','kontakt.html','impressum.html','datenschutz.html','blockbow.html','blockbow-portrait.webp','blockbow-landscape.webp','icon-192.png','manifest.webmanifest'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.all(SHELL.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 /* Netzwerk zuerst (neue Versionen erscheinen sofort), Cache nur als Notlösung ohne Internet */
