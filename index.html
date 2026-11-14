@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f1730">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="description" content="Irrwald: kostenlose Browserspiele ohne Download. Aussuchen, anklicken, losspielen.">
 <title>Irrwald – Kostenlose Spiele online spielen</title>
 <style>
@@ -138,7 +141,7 @@ a.lucky{display:inline-flex;align-items:center;color:var(--text);text-decoration
     <button class="clear" id="clear" aria-label="Suche leeren">✕</button>
     <ul class="sug" id="sug" role="listbox"></ul>
   </div>
-  <div class="acts"><button class="lucky" id="lucky" hidden>🎲 Zufallsspiel</button></div>
+  <div class="acts"><button class="lucky" id="inst" hidden>⬇ App installieren</button><button class="lucky" id="lucky" hidden>🎲 Zufallsspiel</button></div>
 </header>
 <div class="app">
   <nav class="rail" aria-label="Kategorien" id="cats"></nav>
@@ -302,6 +305,13 @@ $('back').addEventListener('click',closeGame);
 $('full').addEventListener('click',()=>{const el=$('stage');try{(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(_){}});
 
 renderAll();
+
+/* App-Installation (Chrome) */
+let dp=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
+$('inst').addEventListener('click',async()=>{if(!dp)return;dp.prompt();try{await dp.userChoice}catch(_){}dp=null;$('inst').hidden=true});
+addEventListener('appinstalled',()=>{$('inst').hidden=true});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
 </html>
