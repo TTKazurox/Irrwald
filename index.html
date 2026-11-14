@@ -115,6 +115,9 @@ a.lucky{display:inline-flex;align-items:center;color:var(--text);text-decoration
 .stage{flex:1;min-height:0;display:grid;place-items:center;background:#060a1c}
 .stage iframe{width:100%;height:100%;border:0;background:#000}
 
+/* Kein Bild-Menü (Herunterladen/Kopieren/Teilen) beim langen Drücken auf Kacheln und Banner */
+.tile,.hbg,.hmedia,.cta,.sug li{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.tile img,.hbg img,.hbg video,.sug img{pointer-events:none;-webkit-user-drag:none;user-select:none}
 @media (max-width:900px){
   .hd{gap:10px;padding:10px 14px}
   .brand{font-size:22px}.brand svg{width:26px;height:26px}
@@ -311,6 +314,10 @@ $('back').addEventListener('click',closeGame);
 $('full').addEventListener('click',()=>{const el=$('stage');try{(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(_){}});
 
 renderAll();
+
+/* Langes Drücken / Rechtsklick auf Kacheln und Banner öffnet kein Bildmenü */
+document.addEventListener('contextmenu',e=>{if(e.target.closest('.tile,.hbg,.hmedia,.sug'))e.preventDefault()});
+document.addEventListener('dragstart',e=>{if(e.target.closest('.tile,.hbg,.hmedia,.sug'))e.preventDefault()});
 
 /* App-Installation (Chrome) */
 let dp=null;
